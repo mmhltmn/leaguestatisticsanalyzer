@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class userInterface extends Application {
+public class UserInterface extends Application {
 
     private Button summonerButton  = new Button();
     private TextArea championText = new TextArea();
