@@ -1,19 +1,29 @@
 package edu.bsu.cs222.statsanalyzer;
+import com.robrua.orianna.type.exception.APIException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class userInterface extends Application {
 
     private Button summonerButton  = new Button();
-    Pane mainWindow;
+    private TextArea championText = new TextArea();
+    private TextArea statBox = new TextArea();
+    private Text statTitle = new Text("Stat Report: ");
+    private Text championTitle = new Text("Most Played Champions: ");
+    private AnchorPane layout;
     private TextField enterText;
 
     public static void main(String[] args){
@@ -22,51 +32,53 @@ public class userInterface extends Application {
 
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("League of Legends API Reader");
-        displayWindow(primaryStage);
+        getSummonerStats(primaryStage);
     }
 
-    private void displayWindow(Stage primaryStage){
-        mainWindow = new Pane();
-        Scene scene = new Scene(mainWindow, 800, 800);
+
+    private void displayWindow(Stage primaryStage) throws FileNotFoundException {
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+        Pane mainWindow = new Pane();
+        Scene scene = new Scene(mainWindow,(primaryScreenBounds.getWidth()/1.5),  (primaryScreenBounds.getHeight()/1.5));
+        layout = new AnchorPane();
         primaryStage.setScene(scene);
         playerSearchLayoutSetup();
-        //grabSummoner();
-        //will pass a string that contains champion list through 'mostPlayedChampionsTextArea()'
         mostPlayedChampionsTextArea();
-        //Same type of string pass as mentioned above for 'statReportDisplay()'
         statReportDisplay();
+        mainWindow.getChildren().add(layout);
+        positionObjects();
         primaryStage.show();
     }
 
     private void playerSearchLayoutSetup() {
-        Text playerText = new Text("Search for a ranked player: ");
-        playerText.setLayoutX(20);
-        playerText.setLayoutY(25);
+        Text searchInstructions = new Text("Search for a ranked player: ");
+        searchInstructions.setLayoutX(20);
+        searchInstructions.setLayoutY(25);
         enterText = new TextField();
-        enterText.setLayoutX(20);
-        enterText.setLayoutY(35);
-        mainWindow.getChildren().addAll(playerText, enterText);
+        layout.getChildren().addAll(searchInstructions, enterText);
         makeSummonerSearchButton();
-
     }
 
     private void makeSummonerSearchButton() {
         summonerButton.setText("Search");
-        summonerButton.setLayoutX(20);
-        summonerButton.setLayoutY(75);
-        mainWindow.getChildren().add(summonerButton);
+        layout.getChildren().add(summonerButton);
     }
 
-    private void getSummonerName() {
-        final String summoner = enterText.getText();
+    private void getSummonerStats(final Stage primaryStage) throws APIException, FileNotFoundException {
+        displayWindow(primaryStage);
         summonerButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 if (event.getSource() == summonerButton) {
-                    if(summoner == null){
-                        //Print no summoner found.
-                    }else{
-                        //search for name through API
-                        //DisplayFoundSummonerName()
+                    try {
+                        APIRetriever apiRetriever = new APIRetriever(enterText.getText());
+                        ArrayList<String> statReports = apiRetriever.grabStatReports();
+                        championText.setText(statReports.get(1));
+                        statBox.setText(statReports.get(0));
+
+                    } catch (APIException e) {
+                        enterText.setText("No match.");
+                    } catch (FileNotFoundException e) {
+                        enterText.setText("Missing files.");
                     }
                 }
             }
@@ -74,29 +86,44 @@ public class userInterface extends Application {
     }
 
     private void mostPlayedChampionsTextArea(){
-        TextArea championText = new TextArea();
-        Text championTitle = new Text("Most Played Champions: ");
-        championTitle.setLayoutX(600);
-        championTitle.setLayoutY(90);
-        championText.setPrefSize(180, 400);
-        championText.setLayoutX(600);
-        championText.setLayoutY(100);
-        mainWindow.getChildren().addAll(championText, championTitle);
-       //for(int i = 0; i < champions.length() - 1; i++){
-       //     championText.appendText(String.valueOf(i));
-      // }
-
+        championText.setPrefSize(350, 320);
+        layout.getChildren().addAll(championText, championTitle);
     }
+
 
     private void statReportDisplay(){
-        Text statTitle = new Text("Stat Report: ");
-        statTitle.setLayoutX(20);
-        statTitle.setLayoutY(490);
-        TextArea statBox = new TextArea();
         statBox.setPrefSize(350, 320);
-        statBox.setLayoutX(20);
-        statBox.setLayoutY(500);
-        mainWindow.getChildren().addAll(statTitle, statBox);
+        layout.getChildren().addAll(statTitle, statBox);
     }
 
+    private void positionObjects(){
+        anchorSummonerSearch();
+        anchorStatText();
+        anchorChampionText();
+    }
+
+    private void anchorSummonerSearch(){
+        AnchorPane.setTopAnchor(summonerButton, 10d);
+        AnchorPane.setLeftAnchor(summonerButton, 420d);
+        AnchorPane.setTopAnchor(enterText, 10d);
+        AnchorPane.setLeftAnchor(enterText, 230d);
+    }
+
+    private void anchorChampionText(){
+        AnchorPane.setLeftAnchor(championText, 400d);
+        AnchorPane.setTopAnchor(championText, 200d);
+        AnchorPane.setBottomAnchor(championText, 100d);
+        AnchorPane.setBottomAnchor(championTitle, 200d);
+        AnchorPane.setTopAnchor(championTitle, 150d);
+        AnchorPane.setLeftAnchor(championTitle, 400d);
+    }
+
+    private void anchorStatText(){
+        AnchorPane.setLeftAnchor(statBox, 10d);
+        AnchorPane.setBottomAnchor(statBox, 100d);
+        AnchorPane.setTopAnchor(statBox, 200d);
+        AnchorPane.setLeftAnchor(statTitle, 10d);
+        AnchorPane.setBottomAnchor(statTitle, 200d);
+        AnchorPane.setTopAnchor(statTitle, 150d);
+    }
 }
