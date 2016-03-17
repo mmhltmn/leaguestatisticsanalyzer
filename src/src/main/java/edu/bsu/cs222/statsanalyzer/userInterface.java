@@ -16,13 +16,13 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class userInterface extends Application {
+public class UserInterface extends Application {
 
     private Button summonerButton  = new Button();
     private TextArea championText = new TextArea();
     private TextArea statBox = new TextArea();
-    private Text statTitle = new Text("Stat Report: ");
-    private Text championTitle = new Text("Most Played Champions: ");
+    private Text statTitle = new Text("Stat Report:");
+    private Text championTitle = new Text("Most Played Champions:");
     private AnchorPane layout;
     private TextField enterText;
 
@@ -51,7 +51,7 @@ public class userInterface extends Application {
     }
 
     private void playerSearchLayoutSetup() {
-        Text searchInstructions = new Text("Search for a ranked player: ");
+        Text searchInstructions = new Text("Search for a ranked player:");
         searchInstructions.setLayoutX(20);
         searchInstructions.setLayoutY(25);
         enterText = new TextField();

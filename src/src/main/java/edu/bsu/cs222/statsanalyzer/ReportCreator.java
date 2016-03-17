@@ -53,8 +53,6 @@ public class ReportCreator {
         return statReport;
     }
 
-
-
     @SuppressWarnings("unchecked")
     protected String mostPlayedChampSorter(HashMap<String, Integer> champMap){
         Object[] a = champMap.entrySet().toArray();
