@@ -27,7 +27,7 @@ public class MostPlayedRetriever {
     }
 
     private ArrayList<String> createListOfChampions() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File("src/src/main/resources/ListOfChampions"));
+        Scanner scanner = new Scanner(new File("src/main/resources/ListOfChampions"));
         String championList = scanner.useDelimiter("\\A").next();
         scanner.close();
         return new ArrayList<String>(Arrays.asList(championList.split("  ")));
