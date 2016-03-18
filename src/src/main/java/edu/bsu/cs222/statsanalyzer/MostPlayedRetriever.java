@@ -5,7 +5,6 @@ import com.robrua.orianna.type.core.staticdata.Champion;
 import com.robrua.orianna.type.core.stats.AggregatedStats;
 import com.robrua.orianna.type.core.stats.ChampionStats;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.io.InputStream;
