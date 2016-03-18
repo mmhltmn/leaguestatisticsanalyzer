@@ -54,6 +54,7 @@ public class ReportCreator {
     }
 
     @SuppressWarnings("unchecked")
+    //This method will always work even though it is unchecked.
     protected String mostPlayedChampSorter(HashMap<String, Integer> champMap){
         Object[] a = champMap.entrySet().toArray();
         Arrays.sort(a, new Comparator() {
