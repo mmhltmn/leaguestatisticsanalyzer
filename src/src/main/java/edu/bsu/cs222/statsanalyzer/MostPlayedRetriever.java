@@ -8,6 +8,7 @@ import com.robrua.orianna.type.core.stats.ChampionStats;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -27,21 +28,12 @@ public class MostPlayedRetriever {
         return champMap;
     }
 
-    @SuppressWarnings("ConstantConditions")
-    //Suppressed becase if file is null, returns an ArrayList that tells the user their file is empty.
     private ArrayList<String> createListOfChampions() throws FileNotFoundException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        if (((classLoader.getResource("ListOfChampions").getFile()) != null)) {
-            Scanner scanner = new Scanner(new File((classLoader.getResource("ListOfChampions").getFile())));
-            String championList = scanner.useDelimiter("\\A").next();
-            scanner.close();
+        InputStream is = MostPlayedRetriever.class.getResourceAsStream("/ListOfChampions");
+        Scanner scanner = new Scanner(is);
+        String championList = scanner.useDelimiter("\\A").next();
+        scanner.close();
             return new ArrayList<String>(Arrays.asList(championList.split("  ")));
-        }else{
-            ArrayList<String> ifChampionFileMissing = new ArrayList<String>();
-            ifChampionFileMissing.add("Champion file is null.");
-            return ifChampionFileMissing;
-        }
-
     }
 
 }
