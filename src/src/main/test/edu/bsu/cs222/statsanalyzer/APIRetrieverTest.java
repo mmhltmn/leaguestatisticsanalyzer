@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class APIRetrieverTest {
     //Covers ReportCreator code as well.
-    private APIRetriever apiRetriever;
+    private StatsRetriever apiRetriever;
 
     @Before
     public void testSetup(){
-        apiRetriever = new APIRetriever("Hiloka");
+        apiRetriever = new StatsRetriever("Hiloka");
     }
 
     @Test

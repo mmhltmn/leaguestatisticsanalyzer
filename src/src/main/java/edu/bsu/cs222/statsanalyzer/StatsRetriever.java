@@ -1,6 +1,7 @@
 package edu.bsu.cs222.statsanalyzer;
 import com.robrua.orianna.api.core.RiotAPI;
 import com.robrua.orianna.type.core.common.Region;
+import com.robrua.orianna.type.core.game.Game;
 import com.robrua.orianna.type.core.staticdata.Champion;
 import com.robrua.orianna.type.core.stats.AggregatedStats;
 import com.robrua.orianna.type.core.stats.ChampionStats;
@@ -10,13 +11,15 @@ import com.robrua.orianna.type.exception.APIException;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class APIRetriever {
-    protected Summoner player;
-    protected Map statMap;
+public class StatsRetriever {
+    private Summoner player;
+    private Map statMap;
+    private List<Game> recentGames;
 
-    public APIRetriever(String name) throws APIException{
+    public StatsRetriever(String name) throws APIException{
         player = prepareAPIAndSummoner(name);
         statMap = RiotAPI.getRankedStats(player);
+        recentGames = RiotAPI.getRecentGames(name);
     }
 
     public ArrayList<String> grabStatReports() throws FileNotFoundException {

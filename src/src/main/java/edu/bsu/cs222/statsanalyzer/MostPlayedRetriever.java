@@ -34,6 +34,5 @@ public class MostPlayedRetriever {
         scanner.close();
             return new ArrayList<String>(Arrays.asList(championList.split("  ")));
     }
-
 }
 

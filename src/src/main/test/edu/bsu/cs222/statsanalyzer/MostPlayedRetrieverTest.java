@@ -2,25 +2,32 @@ package edu.bsu.cs222.statsanalyzer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Map;
 
 public class MostPlayedRetrieverTest {
 
-    private APIRetriever apiRetriever;
-    private MostPlayedRetriever playedRetriever;
+    private Map statMap;
+
+    public void readFromFile() throws IOException, ClassNotFoundException {
+        FileInputStream input = new FileInputStream("src/main/test-resources/mapObject.ser");
+        ObjectInputStream ois = new ObjectInputStream(input);
+        statMap = (Map) ois.readObject();
+        ois.close();
+    }
 
     @Before
-    public void testSetup(){
-        apiRetriever = new APIRetriever("Hiloka");
-        playedRetriever = new MostPlayedRetriever();
+    public void testSetup() throws IOException, ClassNotFoundException {
+        readFromFile();
     }
 
     @Test
     public void testGetMostPlayedStats() throws FileNotFoundException {
-        HashMap<String, Integer> testMap = playedRetriever.createMostPlayedMap(apiRetriever.statMap);
-        Assert.assertTrue((testMap.get("Xin Zhao")) != null);
-
+        Assert.assertTrue((statMap.get("Xin Zhao")) != null);
     }
 
 }
