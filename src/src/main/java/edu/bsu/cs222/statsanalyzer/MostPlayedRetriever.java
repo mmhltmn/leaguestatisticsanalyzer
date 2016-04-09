@@ -12,10 +12,15 @@ import java.util.*;
 
 
 public class MostPlayedRetriever {
+    private HashMap<String, Integer> champMap;
 
-    protected HashMap<String, Integer> createMostPlayedMap(Map statMap) throws FileNotFoundException {
+    public MostPlayedRetriever(Map statMap) throws FileNotFoundException {
+        createMostPlayedMap(statMap);
+    }
+
+    private void createMostPlayedMap(Map statMap) throws FileNotFoundException {
         ArrayList<String> mostPlayedChamps = createListOfChampions();
-        HashMap<String, Integer> champMap = new HashMap<String, Integer>();
+        champMap = new HashMap<String, Integer>();
         for(String champion: mostPlayedChamps){
             Champion currentChampion = RiotAPI.getChampionByName(champion);
             ChampionStats currentChamp = (ChampionStats) statMap.get(currentChampion);
@@ -24,7 +29,6 @@ public class MostPlayedRetriever {
                 champMap.put(champion,currentChampStats.getTotalGamesPlayed());
             }
         }
-        return champMap;
     }
 
     private ArrayList<String> createListOfChampions() throws FileNotFoundException {
@@ -34,5 +38,23 @@ public class MostPlayedRetriever {
         scanner.close();
             return new ArrayList<String>(Arrays.asList(championList.split("  ")));
     }
+
+    @SuppressWarnings("unchecked")
+    //This method will always work even though the type cast is unchecked.
+    public String mostPlayedChampSorter(){
+        Object[] a = champMap.entrySet().toArray();
+        Arrays.sort(a, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((HashMap.Entry<String, Integer>) o2).getValue().compareTo(((HashMap.Entry<String, Integer>) o1).getValue());
+            }
+        });
+        String sortedMap = "";
+        for (Object e : a) {
+            sortedMap = sortedMap + (((Map.Entry<String, Integer>) e).getKey() +
+                    ": Played " + ((Map.Entry<String, Integer>) e).getValue()) + " times" + "\n";
+        }
+        return sortedMap;
+    }
 }
+
 

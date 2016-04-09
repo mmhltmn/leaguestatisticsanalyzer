@@ -7,46 +7,59 @@ import com.robrua.orianna.type.exception.MissingDataException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-//MAKE SEPARATE MAP FOR WINS AND LOSSES.
-//CREATE REPORT IN THIS CLASS AND RETURN TO UI.
-//STATS RETRIEVER GETS GAMES AND GIVES THEM TO THIS CLASS.
+import java.text.NumberFormat;
+import java.util.*;
+
 public class ItemWinLossCalculator {
     private HashMap<Item,int[]> itemWinAndLossMap= new HashMap<Item, int[]>();
+    private HashMap<Integer, List<Item>> itemsUsedInWinningGames = new HashMap<Integer, List<Item>>();
+    private HashMap<Integer, List<Item>> itemsUsedInLosingGames = new HashMap<Integer, List<Item>>();
     private List<Item> itemsList;
-    private int MAX_GAMES_WON = 10;
-    private int MAX_GAMEMAP_SIZE = 20;
+    private static final int NUMBER_OF_ITEMS = 6;
 
     public ItemWinLossCalculator(List<Game> recentGames){
-        HashMap<Integer, List<Item>> itemsUsedInGamesMap = gameToItemMap(recentGames);
-        createWinAndLossMap(itemsUsedInGamesMap);
+        winsAndLossesToItemMap(recentGames);
+        createWinAndLossMap(itemsUsedInWinningGames);
+        createWinAndLossMap(itemsUsedInLosingGames);
     }
 
-    private HashMap<Integer, List<Item>> gameToItemMap(List<Game> recentGames){
-        HashMap<Integer, List<Item>> itemsUsedInGamesMap = new HashMap<Integer, List<Item>>();
-        for(int i = 0; i < recentGames.size(); i++) {
-            RawStats currentGameStats = recentGames.get(i).getStats();
-             int keyPosition = winOrLoss(currentGameStats);
-             itemsUsedInGamesMap.put(i+keyPosition,makeItemList(currentGameStats));
-    }
-        return itemsUsedInGamesMap;
+    @SuppressWarnings("unchecked")
+    //This method will always work even though the type cast is unchecked.
+    public String createReport(){
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        percentFormat.setMaximumFractionDigits(1);
+        Object[] a = itemWinAndLossMap.entrySet().toArray();
+        String sortedMap = "";
+        for (Object e : a) {
+            int[] currentValue = ((Map.Entry<Integer, int[]>) e).getValue();
+            int gamesPlayed = currentValue[0] + currentValue[1];
+            sortedMap = sortedMap + (((Map.Entry<Integer, int[]>) e).getKey() +
+                    ": Bought " + gamesPlayed + " times, Win Rate: " +
+                    percentFormat.format((double)(currentValue[0])/gamesPlayed) + "\n");
+        }
+        return sortedMap;
     }
 
-    private int winOrLoss(RawStats currentGameStats) {
-        if (currentGameStats.getWin()){
-            return 0;
-        }else{
-            return 10;
+    private void winsAndLossesToItemMap(List<Game> recentGames) {
+        int wins = 0;
+        int losses = 0;
+        for (Game currentGame: recentGames) {
+            RawStats currentGameStats = currentGame.getStats();
+            if (currentGameStats.getWin()) {
+                itemsUsedInWinningGames.put(wins, makeItemList(currentGameStats));
+                wins++;
+            }else{
+                itemsUsedInLosingGames.put(losses, makeItemList(currentGameStats));
+                losses++;
+            }
         }
     }
 
     private List<Item> makeItemList(RawStats currentGameStats) throws MissingDataException {
         ArrayList<Item> items = new ArrayList<Item>();
-        for (int i=0;i<7;i++){
+        for (int i=0;i<=NUMBER_OF_ITEMS;i++){
             try{
-                Method m= currentGameStats.getClass().getMethod("getItem"+String.valueOf(i), new Class[]{});
+                Method m= currentGameStats.getClass().getMethod("getItem"+String.valueOf(i));
                 items.add((Item)(m.invoke(currentGameStats)));
             }catch (MissingDataException e){
                 items.add(null);
@@ -61,36 +74,41 @@ public class ItemWinLossCalculator {
         return items;
     }
 
-    private void createWinAndLossMap(HashMap<Integer, List<Item>> itemsUsedInGamesMap){
-        for(int gameNumber = 0; gameNumber <= MAX_GAMEMAP_SIZE; gameNumber++){
-            if (itemsUsedInGamesMap.get(gameNumber) != null){
-                itemsList = itemsUsedInGamesMap.get(gameNumber);
-                putInMapWithWinCount(gameNumber);
-                }
+    private void createWinAndLossMap(HashMap<Integer, List<Item>> currentMap){
+        for(int gameNumber = 0; gameNumber < currentMap.size(); gameNumber++){
+            if (currentMap == itemsUsedInWinningGames){
+                itemsList = currentMap.get(gameNumber);
+                putWinsAndLossesInMap(true);
+            }else if(currentMap == itemsUsedInLosingGames){
+                itemsList = currentMap.get(gameNumber);
+                putWinsAndLossesInMap(false);
+
             }
+        }
     }
 
-    private void putInMapWithWinCount(int gameNumber) {
+    private void putWinsAndLossesInMap(boolean win) {
         for (int itemNumber = 0; itemNumber < itemsList.size(); itemNumber++) {
-            if (!(itemWinAndLossMap.containsKey(itemsList.get(itemNumber)))) {
+            Item currentItem = itemsList.get(itemNumber);
+            if (!(itemWinAndLossMap.containsKey(currentItem)) && currentItem != null) {
                 itemWinAndLossMap.put(itemsList.get(itemNumber), new int[2]);
-            } else if (itemWinAndLossMap.containsKey(itemsList.get(itemNumber)) && gameNumber < MAX_GAMES_WON) {
+            }if (itemWinAndLossMap.containsKey(currentItem) && win){
                 addToWinCountInMap(itemNumber);
-            } else if (itemWinAndLossMap.containsKey(itemsList.get(itemNumber)) && gameNumber >= MAX_GAMES_WON) {
+            }if (itemWinAndLossMap.containsKey(currentItem) && !win) {
                 addToLossCountInMap(itemNumber);
             }
         }
     }
 
-        private void addToWinCountInMap(int itemNumber){
+    private void addToWinCountInMap(int itemNumber){
         int[] newWinCount = itemWinAndLossMap.get(itemsList.get(itemNumber));
-        newWinCount[0] = newWinCount[0]++;
+        newWinCount[0]++;
         itemWinAndLossMap.put(itemsList.get(itemNumber), newWinCount);
     }
 
     private void addToLossCountInMap(int itemNumber){
         int[] newLossCount = itemWinAndLossMap.get(itemsList.get(itemNumber));
-        newLossCount[1] = newLossCount[1]++;
+        newLossCount[1]++;
         itemWinAndLossMap.put(itemsList.get(itemNumber), newLossCount);
     }
 }

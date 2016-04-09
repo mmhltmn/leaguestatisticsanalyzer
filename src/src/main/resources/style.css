@@ -13,12 +13,28 @@
 .tab-pane .tab
 {
     -fx-background-color: #e6e6e6;
+}
 
+.root{
+    -fx-background-color: rgb(200, 200, 200);
+}
+
+.text-area{
+
+   -fx-background-color: white;
+   -fx-opacity: .6;
+}
+
+
+.tab-pane
+{
+    -fx-tab-min-width:400;
 }
 
 .tab-pane .tab:selected
 {
     -fx-background-color: #3c3c3c;
+
 }
 
 .tab .tab-label {

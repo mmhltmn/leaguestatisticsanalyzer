@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class APIRetrieverTest {
     //Covers ReportCreator code as well.
-    private StatsRetriever apiRetriever;
+    private StatReportRetriever reportRetriever;
 
     @Before
     public void testSetup(){
-        apiRetriever = new StatsRetriever("Hiloka");
+        reportRetriever = new StatReportRetriever("Hiloka");
     }
 
     @Test
@@ -26,13 +26,13 @@ public class APIRetrieverTest {
 
     @Test
     public void isPlayerObjectReturningStats() throws FileNotFoundException {
-        ArrayList<String> statReports = apiRetriever.grabStatReports();
+        ArrayList<String> statReports = reportRetriever.grabStatReports();
         Assert.assertTrue(statReports.get(0).contains("Total Wins"));
     }
 
     @Test
     public void isPlayerObjectReturningMostPlayed() throws FileNotFoundException {
-        ArrayList<String> statReports = apiRetriever.grabStatReports();
+        ArrayList<String> statReports = reportRetriever.grabStatReports();
         Assert.assertTrue(statReports.get(1).contains("Played"));
     }
 

@@ -10,7 +10,7 @@ public class GameDataTest {
     //We need to figure out how to not touch the network -- also will we cover report creating in GameData or will we keep ReportCreator?
     @Test
     public void testGetMostPlayedStats(){
-        StatsRetriever aa = new StatsRetriever("Hiloka");
+        StatReportRetriever aa = new StatReportRetriever("Hiloka");
     }
 
     }

@@ -9,12 +9,11 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 
 public class UserInterface extends Application {
-
     private Scene scene;
     private AnchorPane generalPane = new AnchorPane();
     private AnchorPane itemPane = new AnchorPane();
     private TabPane tab = new TabPane();
-    GeneralPane gt;
+    GeneralPane gt = new GeneralPane();
     ItemsPane it = new ItemsPane();
 
     public static void main(String[] args){
@@ -23,16 +22,15 @@ public class UserInterface extends Application {
 
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("League of Legends API Reader");
+        generalPane = gt.makeGeneralAnchorPane();
+        itemPane = it.makeItemAnchorPane();
         displayWindow(primaryStage);
     }
 
     private void displayWindow(Stage primaryStage) throws FileNotFoundException {
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        gt = new GeneralPane();
-        generalPane = gt.makeGeneralAnchorPane();
-        itemPane = it.makeItemAnchorPane();
         makeTabs();
-        scene = new Scene(tab,(primaryScreenBounds.getWidth()/1.5),  (primaryScreenBounds.getHeight()/1.5));
+        scene = new Scene(tab,(primaryScreenBounds.getWidth()/1.5), (primaryScreenBounds.getHeight()/1.5));
         primaryStage.setScene(scene);
         importStyleSheet();
         primaryStage.show();
