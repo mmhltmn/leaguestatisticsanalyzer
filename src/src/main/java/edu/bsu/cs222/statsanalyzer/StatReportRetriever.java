@@ -20,7 +20,8 @@ public class StatReportRetriever{
 
     public ArrayList<String> grabStatReports() throws FileNotFoundException {
         StatsRetriever statsRetriever = new StatsRetriever(statMap);
-        MostPlayedRetriever mostPlayedRetriever = new MostPlayedRetriever(statMap);
+        MostPlayedRetriever mostPlayedRetriever = new MostPlayedRetriever();
+        mostPlayedRetriever.createMostPlayedMap(statMap);
         ArrayList<String> statStrings = new ArrayList<String>();
         statStrings.add(statsRetriever.statisticReportCreator());
         statStrings.add(mostPlayedRetriever.mostPlayedChampSorter());

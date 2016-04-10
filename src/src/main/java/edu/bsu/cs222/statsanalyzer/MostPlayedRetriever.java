@@ -12,13 +12,9 @@ import java.util.*;
 
 
 public class MostPlayedRetriever {
-    private HashMap<String, Integer> champMap;
+    protected HashMap<String, Integer> champMap;
 
-    public MostPlayedRetriever(Map statMap) throws FileNotFoundException {
-        createMostPlayedMap(statMap);
-    }
-
-    private void createMostPlayedMap(Map statMap) throws FileNotFoundException {
+    public void createMostPlayedMap(Map statMap) throws FileNotFoundException {
         ArrayList<String> mostPlayedChamps = createListOfChampions();
         champMap = new HashMap<String, Integer>();
         for(String champion: mostPlayedChamps){

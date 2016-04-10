@@ -5,7 +5,6 @@ import com.robrua.orianna.type.core.staticdata.Champion;
 import com.robrua.orianna.type.core.stats.AggregatedStats;
 import com.robrua.orianna.type.core.stats.ChampionStats;
 
-import java.io.FileNotFoundException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -14,16 +13,16 @@ import java.util.Map;
 public class StatsRetriever {
     private DecimalFormat df = new DecimalFormat(("#.##"));
     private AggregatedStats playerStatsObject;
-    private String statReport;
+    private String statReport = "";
 
-    public StatsRetriever(Map statMap) throws FileNotFoundException {
-        playerStatsObject = pullStatsFromMap(statMap);
+    public StatsRetriever(Map statMap){
+        pullStatsFromMap(statMap);
     }
 
-    private AggregatedStats pullStatsFromMap(Map statMap) {
-        Champion AvgChampion = RiotAPI.getChampionByID(0);
-        ChampionStats avgChampStats = (ChampionStats) statMap.get(AvgChampion);
-        return avgChampStats.getStats();
+    private void pullStatsFromMap(Map statMap) {
+        Champion avgChampion = RiotAPI.getChampionByID(0);
+        ChampionStats avgChampStats = (ChampionStats) statMap.get(avgChampion);
+        playerStatsObject = avgChampStats.getStats();
     }
 
     public String statisticReportCreator() {
