@@ -1,4 +1,6 @@
 package edu.bsu.cs222.statsanalyzer;
+import com.robrua.orianna.api.core.RiotAPI;
+import com.robrua.orianna.type.core.common.Region;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,14 +15,15 @@ public class UserInterface extends Application {
     private AnchorPane generalPane = new AnchorPane();
     private AnchorPane itemPane = new AnchorPane();
     private TabPane tab = new TabPane();
-    GeneralPane gt = new GeneralPane();
-    ItemsPane it = new ItemsPane();
+    GeneralStatsPane gt = new GeneralStatsPane();
+    ItemsStatsPane it = new ItemsStatsPane();
 
     public static void main(String[] args){
         launch(args);
     }
 
     public void start(Stage primaryStage) throws Exception{
+        chooseRegionAndKey();
         primaryStage.setTitle("League of Legends API Reader");
         generalPane = gt.makeGeneralAnchorPane();
         itemPane = it.makeItemAnchorPane();
@@ -48,5 +51,10 @@ public class UserInterface extends Application {
         general.setContent(generalPane);
         items.setContent(itemPane);
         tab.getTabs().addAll(general, items);
+    }
+
+    private void chooseRegionAndKey() {  //Tested
+        RiotAPI.setRegion(Region.NA);
+        RiotAPI.setAPIKey("70f18885-23eb-4106-ad64-04554ffc5b4d");
     }
 }

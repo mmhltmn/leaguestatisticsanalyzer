@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class GeneralPane {
+public class GeneralStatsPane {
     private Button summonerButton  = new Button();
     private TextArea championText = new TextArea();
     private TextArea statBox = new TextArea();
@@ -20,7 +20,7 @@ public class GeneralPane {
     private Text statTitle = new Text("Stat Report:");
     private Text championTitle = new Text("Most Played Champions:");
 
-    public GeneralPane(){
+    public GeneralStatsPane(){
         generalLayout = new AnchorPane();
         getSummonerStats();
         playerSearchLayoutSetup();
@@ -39,9 +39,9 @@ public class GeneralPane {
                 if (event.getSource() == summonerButton) {
                     try {
                         StatReportRetriever reportRetriever = new StatReportRetriever(enterText.getText());
-                        ArrayList<String> statReports = reportRetriever.grabStatReports();
-                        championText.setText(statReports.get(1));
-                        statBox.setText(statReports.get(0));
+                        //ArrayList<String> statReports = reportRetriever.grabStatReports();
+                        //championText.setText(statReports.get(1));
+                       // statBox.setText(statReports.get(0));
 
                     } catch (APIException e) {
                         enterText.setText("No match.");

@@ -23,23 +23,6 @@ public class ItemWinLossCalculator {
         createWinAndLossMap(itemsUsedInLosingGames);
     }
 
-    @SuppressWarnings("unchecked")
-    //This method will always work even though the type cast is unchecked.
-    public String createReport(){
-        NumberFormat percentFormat = NumberFormat.getPercentInstance();
-        percentFormat.setMaximumFractionDigits(1);
-        Object[] a = itemWinAndLossMap.entrySet().toArray();
-        String sortedMap = "";
-        for (Object e : a) {
-            int[] currentValue = ((Map.Entry<Integer, int[]>) e).getValue();
-            int gamesPlayed = currentValue[0] + currentValue[1];
-            sortedMap = sortedMap + (((Map.Entry<Integer, int[]>) e).getKey() +
-                    ": Bought " + gamesPlayed + " times, Win Rate: " +
-                    percentFormat.format((double)(currentValue[0])/gamesPlayed) + "\n");
-        }
-        return sortedMap;
-    }
-
     private void winsAndLossesToItemMap(List<Game> recentGames) {
         int wins = 0;
         int losses = 0;

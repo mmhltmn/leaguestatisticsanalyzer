@@ -8,14 +8,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-public class ItemsPane{
+public class ItemsStatsPane{
     private Text itemTitle = new Text("Items: ");
     private TextArea itemsText = new TextArea();
     private AnchorPane itemLayout;
     private TextField enterText;
     private Button summonerButton = new Button();
 
-    public ItemsPane(){
+    public ItemsStatsPane(){
         itemLayout = new AnchorPane();
         getItemStats();
         itemsTextArea();
@@ -33,7 +33,7 @@ public class ItemsPane{
                 if (event.getSource() == summonerButton) {
                     try {
                         StatReportRetriever reportRetriever = new StatReportRetriever(enterText.getText());
-                        itemsText.setText(reportRetriever.grabItemReport());
+                       // itemsText.setText(reportRetriever.grabItemReport());
                     } catch (APIException e) {
                         enterText.setText("No match.");
                     }

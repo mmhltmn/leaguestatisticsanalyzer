@@ -18,30 +18,10 @@ public class StatReportRetriever{
         recentGames = RiotAPI.getRecentGames(name);
     }
 
-    public ArrayList<String> grabStatReports() throws FileNotFoundException {
-        StatsRetriever statsRetriever = new StatsRetriever(statMap);
-        MostPlayedRetriever mostPlayedRetriever = new MostPlayedRetriever();
-        mostPlayedRetriever.createMostPlayedMap(statMap);
-        ArrayList<String> statStrings = new ArrayList<String>();
-        statStrings.add(statsRetriever.statisticReportCreator());
-        statStrings.add(mostPlayedRetriever.mostPlayedChampSorter());
-        return statStrings;
-    }
-
-    public String grabItemReport(){
-        ItemWinLossCalculator itemWinLossCalculator = new ItemWinLossCalculator(recentGames);
-        return itemWinLossCalculator.createReport();
-    }
-
-    private Summoner prepareAPIAndSummoner(String name) throws APIException {
-            chooseRegionAndKey();
-            return RiotAPI.getSummonerByName(name);
-    }
-
-    private void chooseRegionAndKey() {  //Tested
-        RiotAPI.setRegion(Region.NA);
-        RiotAPI.setAPIKey("70f18885-23eb-4106-ad64-04554ffc5b4d");
-    }
+  //  private Summoner prepareAPIAndSummoner(String name) throws APIException {
+    //        chooseRegionAndKey();
+     //       return RiotAPI.getSummonerByName(name);
+   // }
 }
 
 
