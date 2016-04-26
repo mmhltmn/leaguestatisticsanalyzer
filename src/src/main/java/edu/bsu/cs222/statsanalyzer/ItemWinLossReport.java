@@ -19,7 +19,7 @@ public class ItemWinLossReport {
 
     @SuppressWarnings("unchecked")
     //This method will always work even though the type cast is unchecked.
-    public void createWinLossReport(List<GameItem> gamesList) {
+    private void createWinLossReport(List<GameItem> gamesList) {
         NumberFormat percentFormat = NumberFormat.getPercentInstance();
         percentFormat.setMaximumFractionDigits(1);
         winLossReportText = "";

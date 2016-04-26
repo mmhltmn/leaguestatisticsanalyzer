@@ -3,33 +3,29 @@ package edu.bsu.cs222.statsanalyzer;
 
 import com.robrua.orianna.type.core.staticdata.Champion;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class MostPlayedReport {
     private String mostPlayedReportText;
 
-    public MostPlayedReport(HashMap<Champion,Integer> champMap){
-        mostPlayedChampSorter(champMap);
+    public MostPlayedReport(Map statMap) throws FileNotFoundException {
+        MostPlayedRetriever retriever = new MostPlayedRetriever(statMap);
+        List<MostPlayedChampion> champList = retriever.getChampList();
+        mostPlayedReportText = mostPlayedChampSorter(champList);
     }
 
     @SuppressWarnings("unchecked")
     //This method will always work even though the type cast is unchecked.
-    private String mostPlayedChampSorter(HashMap<Champion,Integer> champMap){
-        Object[] a = champMap.entrySet().toArray();
-        Arrays.sort(a, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                return ((HashMap.Entry<Champion, Integer>) o2).getValue().compareTo(((HashMap.Entry<Champion, Integer>) o1).getValue());
-            }
-        });
-        String sortedMap = "";
-        for (Object e : a) {
-            sortedMap = sortedMap + ((((Map.Entry<Champion, Integer>) e).getKey()).getName() +
-                    ": Played " + ((Map.Entry<Champion, Integer>) e).getValue()) + " times" + "\n";
+    private String mostPlayedChampSorter(List<MostPlayedChampion> champList){
+        Collections.sort(champList);
+        String mostPlayedReport = "";
+        for (int i = 0; i < champList.size(); i++) {
+            MostPlayedChampion currentChamp = champList.get(i);
+            mostPlayedReport = mostPlayedReport + currentChamp.getChampionName() +
+                    ": Played " + currentChamp.gettimesPlayed() + " times" + "\n";
         }
-        return sortedMap;
+        return mostPlayedReport;
     }
 
     public String getMostPlayedReport(){

@@ -12,17 +12,22 @@ import java.util.*;
 
 
 public class MostPlayedRetriever {
-    protected HashMap<Champion, Integer> champMap;
+    private List<MostPlayedChampion> champList = new ArrayList<MostPlayedChampion>();
 
-    public void createMostPlayedMap(Map statMap) throws FileNotFoundException {
+    public MostPlayedRetriever(Map statMap) throws FileNotFoundException {
+        createMostPlayedChampList(statMap);
+    }
+
+
+
+    private void createMostPlayedChampList(Map statMap) throws FileNotFoundException {
         ArrayList<String> mostPlayedChamps = createListOfChampions();
-        champMap = new HashMap<Champion, Integer>();
         for(String champion: mostPlayedChamps){
             Champion currentChampion = RiotAPI.getChampionByName(champion);
             ChampionStats currentChamp = (ChampionStats) statMap.get(currentChampion);
             if(currentChamp != null) {
                 AggregatedStats currentChampStats = currentChamp.getStats();
-                champMap.put(currentChampion,currentChampStats.getTotalGamesPlayed());
+                champList.add(new MostPlayedChampion(champion,currentChampStats.getTotalGamesPlayed()));
             }
         }
     }
@@ -33,6 +38,10 @@ public class MostPlayedRetriever {
         String championList = scanner.useDelimiter("\\A").next();
         scanner.close();
             return new ArrayList<String>(Arrays.asList(championList.split("  ")));
+    }
+
+    public List<MostPlayedChampion> getChampList(){
+        return champList;
     }
 }
 
