@@ -45,8 +45,8 @@ public class GeneralStatsPane {
 
                     } catch (APIException e) {
                         enterText.setText("No match.");
-                    } catch (FileNotFoundException e) {
-                        enterText.setText("Missing files.");
+                   // } catch (FileNotFoundException e) {
+                     //   enterText.setText("Missing files.");
                     }
                 }
             }

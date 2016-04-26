@@ -1,54 +1,45 @@
 package edu.bsu.cs222.statsanalyzer;
 
-import com.robrua.orianna.type.core.stats.AggregatedStats;
+import com.robrua.orianna.api.core.RiotAPI;
+import com.robrua.orianna.type.core.summoner.Summoner;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Map;
 
 public class GeneralStatsReport {
     private String statReportText;
 
-    public GeneralStatsReport(AggregatedStats playerStatsObject) {
-        statisticReportCreator(playerStatsObject);
+    public GeneralStatsReport(Summoner player){
+        Map statMap = RiotAPI.getRankedStats(player);
+        GeneralStatsRetriever statsRetriever = new GeneralStatsRetriever(statMap);
+        statisticReportCreator(statsRetriever);
     }
 
-    private void statisticReportCreator(AggregatedStats playerStatsObject) {
+    private void statisticReportCreator(GeneralStatsRetriever statsRetriever) {
+        DecimalFormat df = createDecimalFormat();
+        statReportText += "Ranked Games Played: ";
+        statReportText += statsRetriever.getRankedGamesPlayed();
+        statReportText += "\nTotal Wins: ";
+        statReportText += statsRetriever.getTotalWins();
+        statReportText += "\nTotal Losses: ";
+        statReportText += statsRetriever.getTotalLosses();
+        statReportText += "\nWin/Loss Ratio: ";
+        statReportText += df.format(statsRetriever.getWinLossRatio());
+        statReportText += "\nAverage Champions Killed: ";
+        statReportText += df.format(statsRetriever.getAvgChampionsKilled());
+        statReportText += "\nAverage Assists: ";
+        statReportText += df.format(statsRetriever.getAvgAssists());
+        statReportText += "\nAverage Number of Deaths: ";
+        statReportText += df.format(statsRetriever.getAvgDeaths());
+        statReportText += "\nAverage Kill/Death Ratio: ";
+        statReportText += df.format(statsRetriever.getAvgKillDeathRatio());
+    }
+
+    private DecimalFormat createDecimalFormat(){
         DecimalFormat df = new DecimalFormat(("#.##"));
         df.setRoundingMode(RoundingMode.DOWN);
-        int totalGamesPlayed = playerStatsObject.getTotalGamesPlayed();
-        int totalLosses = playerStatsObject.getTotalLosses();
-        statReportText += "Ranked Games Played: ";
-        statReportText += totalGamesPlayed;
-        if (totalGamesPlayed == 0) {
-            totalGamesPlayed++;
-        }
-        double totalGamesPlayedD = totalGamesPlayed;
-        statReportText += "\nTotal Wins: ";
-        statReportText += playerStatsObject.getTotalWins();
-        statReportText += "\nTotal Losses: ";
-        statReportText += totalLosses;
-        if (totalLosses == 0) {
-            totalLosses++;
-        }
-        double totalLossesD = totalLosses;
-        statReportText += "\nWin/Loss Ratio: ";
-        statReportText += df.format(playerStatsObject.getTotalWins() / totalLossesD);
-        statReportText += "\nAverage Champions Killed: ";
-        statReportText += df.format(playerStatsObject.getTotalKills() / totalGamesPlayedD);
-        statReportText += "\nAverage Assists: ";
-        statReportText += df.format(playerStatsObject.getTotalAssists() / totalGamesPlayedD);
-        statReportText += "\nAverage Number of Deaths: ";
-        statReportText += df.format(playerStatsObject.getTotalDeaths() / totalGamesPlayedD);
-        statReportText += "\nAverage Kill/Death Ratio: ";
-        if (playerStatsObject.getTotalDeaths() != 0) {
-            statReportText += df.format(((playerStatsObject.getTotalKills() / totalGamesPlayedD)
-                    + (playerStatsObject.getTotalAssists() / totalGamesPlayedD))
-                    / ((double) playerStatsObject.getTotalDeaths() / totalGamesPlayedD));
-        } else {
-            statReportText += df.format(playerStatsObject.getAverageKills() + playerStatsObject.getAverageAssists());
-
-        }
-        statReportText += "\n";
+        return df;
     }
 
     public String getGeneralStatsReport(){

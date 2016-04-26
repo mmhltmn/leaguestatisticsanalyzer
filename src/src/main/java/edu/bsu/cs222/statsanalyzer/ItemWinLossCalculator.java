@@ -7,7 +7,6 @@ import com.robrua.orianna.type.exception.MissingDataException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.NumberFormat;
 import java.util.*;
 
 public class ItemWinLossCalculator {
@@ -94,4 +93,18 @@ public class ItemWinLossCalculator {
         newLossCount[1]++;
         itemWinAndLossMap.put(itemsList.get(itemNumber), newLossCount);
     }
+
+    public List<GameItem> makeListForReport(){
+        List<GameItem> gameItems = new ArrayList<GameItem>();
+        Object[] a = itemWinAndLossMap.entrySet().toArray();
+        for (Object e : a) {
+            String name = ((Map.Entry<Item, int[]>) e).getKey().getName();
+            int[] winLoss = ((Map.Entry<Item, int[]>) e).getValue();
+            GameItem currentItem = new GameItem(name, winLoss);
+            gameItems.add(currentItem);
+        }
+        return gameItems;
+    }
+
+
 }

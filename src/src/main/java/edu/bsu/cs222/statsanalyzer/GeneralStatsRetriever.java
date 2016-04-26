@@ -11,22 +11,105 @@ import java.util.Map;
 
 
 public class GeneralStatsRetriever {
-    private AggregatedStats playerStatsObject;
-    public GeneralStatsRetriever(Map statMap){
-        pullStatsFromMap(statMap);
+    private int rankedGamesPlayed;
+    private int totalWins;
+    private int totalLosses;
+    private double winLossRatio;
+    private double avgChampionsKilled;
+    private double avgAssists;
+    private double avgDeaths;
+    private double avgKillDeathRatio;
+
+    public GeneralStatsRetriever(Map statMap) {
+        AggregatedStats playersStatsObject = pullStatsObjectFromMap(statMap);
+        setFieldsFromStatsObject(playersStatsObject);
     }
 
-    private void pullStatsFromMap(Map statMap) {
+    private AggregatedStats pullStatsObjectFromMap(Map statMap) {
         Champion avgChampion = RiotAPI.getChampionByID(0);
         ChampionStats avgChampStats = (ChampionStats) statMap.get(avgChampion);
-        playerStatsObject = avgChampStats.getStats();
-    }
-
-    public AggregatedStats getPlayerStatsObject(){
+        AggregatedStats playerStatsObject = avgChampStats.getStats();
         return playerStatsObject;
     }
 
+    private void setFieldsFromStatsObject(AggregatedStats playerStatsObject) {
+        rankedGamesPlayed = playerStatsObject.getTotalGamesPlayed();
+        totalWins = playerStatsObject.getTotalWins();
+        totalLosses = playerStatsObject.getTotalLosses();
+        winLossRatio = calculateWinLossRatio();
+        setAvgFields(playerStatsObject);
+    }
+
+    private void setAvgFields(AggregatedStats playerStatsObject){
+        double rankedGamesPlayedDivision = calculateGamesPlayedForDivision(playerStatsObject);
+        avgChampionsKilled = (playerStatsObject.getTotalKills() / rankedGamesPlayedDivision);
+        avgAssists = (playerStatsObject.getTotalAssists() / rankedGamesPlayedDivision);
+        avgDeaths = (playerStatsObject.getTotalDeaths() / rankedGamesPlayedDivision);
+        avgKillDeathRatio = calculateAvgKillDeathRatio();
+    }
+
+    private double calculateWinLossRatio(){
+        if (totalLosses != 0) {
+            return totalWins / totalLosses;
+        } else {
+            return totalWins;
+        }
+    }
+
+    private double calculateGamesPlayedForDivision(AggregatedStats playerStatsObject){
+        if (rankedGamesPlayed != 0) {
+            return rankedGamesPlayed + 1;
+        } else {
+            return rankedGamesPlayed;
+        }
+    }
+
+    private double calculateAvgKillDeathRatio(){
+        if (avgDeaths != 0) {
+            return avgChampionsKilled + avgAssists / avgDeaths;
+        } else {
+            return avgChampionsKilled + avgAssists;
+        }
+    }
+
+    public int getRankedGamesPlayed(){
+        return rankedGamesPlayed;
+    }
+
+    public int getTotalWins(){
+        return totalWins;
+    }
+
+    public int getTotalLosses(){
+        return totalLosses;
+    }
+
+    public double getWinLossRatio(){
+        return winLossRatio;
+    }
+
+    public double getAvgChampionsKilled(){
+        return avgChampionsKilled;
+    }
+
+    public double getAvgAssists(){
+        return avgAssists;
+    }
+
+    public double getAvgDeaths(){
+        return avgDeaths;
+    }
+
+    public double getAvgKillDeathRatio(){
+        return avgKillDeathRatio;
+    }
 }
+
+
+
+
+
+
 
 
 

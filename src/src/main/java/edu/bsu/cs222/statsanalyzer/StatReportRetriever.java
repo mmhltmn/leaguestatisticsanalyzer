@@ -13,9 +13,9 @@ public class StatReportRetriever{
     private Map statMap;
 
     public StatReportRetriever(String name) throws APIException{
-        Summoner player = prepareAPIAndSummoner(name);
-        statMap = RiotAPI.getRankedStats(player);
-        recentGames = RiotAPI.getRecentGames(name);
+       // Summoner player = prepareAPIAndSummoner(name);
+       // statMap = RiotAPI.getRankedStats(player);
+       // recentGames = RiotAPI.getRecentGames(name);
     }
 
   //  private Summoner prepareAPIAndSummoner(String name) throws APIException {
