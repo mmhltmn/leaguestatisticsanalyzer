@@ -1,8 +1,5 @@
 package edu.bsu.cs222.statsanalyzer;
 
-
-import com.robrua.orianna.type.core.staticdata.Champion;
-
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -15,8 +12,6 @@ public class MostPlayedReport {
         mostPlayedReportText = mostPlayedChampSorter(champList);
     }
 
-    @SuppressWarnings("unchecked")
-    //This method will always work even though the type cast is unchecked.
     private String mostPlayedChampSorter(List<MostPlayedChampion> champList){
         Collections.sort(champList);
         String mostPlayedReport = "";

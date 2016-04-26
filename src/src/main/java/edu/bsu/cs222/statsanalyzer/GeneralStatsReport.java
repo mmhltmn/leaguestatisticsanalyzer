@@ -10,8 +10,7 @@ import java.util.Map;
 public class GeneralStatsReport {
     private String statReportText;
 
-    public GeneralStatsReport(Summoner player){
-        Map statMap = RiotAPI.getRankedStats(player);
+    public GeneralStatsReport(Map statMap){
         GeneralStatsRetriever statsRetriever = new GeneralStatsRetriever(statMap);
         statisticReportCreator(statsRetriever);
     }
