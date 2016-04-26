@@ -23,7 +23,7 @@ public class MostPlayedReport {
         return mostPlayedReport;
     }
 
-    public String getMostPlayedReport(){
+    public String getReport(){
         return mostPlayedReportText;
     }
 }

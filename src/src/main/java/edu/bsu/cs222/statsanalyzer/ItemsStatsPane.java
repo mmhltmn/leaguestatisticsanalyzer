@@ -1,4 +1,7 @@
 package edu.bsu.cs222.statsanalyzer;
+import com.robrua.orianna.api.core.RiotAPI;
+import com.robrua.orianna.type.core.game.Game;
+import com.robrua.orianna.type.core.summoner.Summoner;
 import com.robrua.orianna.type.exception.APIException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,38 +11,49 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
+
 public class ItemsStatsPane{
     private Text itemTitle = new Text("Items: ");
     private TextArea itemsText = new TextArea();
     private AnchorPane itemLayout;
-    private TextField enterText;
-    private Button summonerButton = new Button();
 
     public ItemsStatsPane(){
         itemLayout = new AnchorPane();
-        getItemStats();
+        //getItemStats();
         itemsTextArea();
         anchorItemText();
-        playerSearchLayoutSetup();
+        //playerSearchLayoutSetup();
     }
 
     public AnchorPane makeItemAnchorPane(){
         return itemLayout;
     }
 
-    private void getItemStats() throws APIException {
-        summonerButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                if (event.getSource() == summonerButton) {
-                    try {
-                        StatReportRetriever reportRetriever = new StatReportRetriever(enterText.getText());
-                       // itemsText.setText(reportRetriever.grabItemReport());
-                    } catch (APIException e) {
-                        enterText.setText("No match.");
-                    }
-                }
-            }
-        });
+    /* private void getItemStats() throws APIException {
+         summonerButton.setOnAction(new EventHandler<ActionEvent>() {
+             public void handle(ActionEvent event) {
+                 if (event.getSource() == summonerButton) {
+                     try {
+                         StatReportRetriever reportRetriever = new StatReportRetriever(enterText.getText());
+                        // itemsText.setText(reportRetriever.grabItemReport());
+                        // List<Game> recentGames = RiotAPI.getRecentGames(name);
+
+                     } catch (APIException e) {
+                         enterText.setText("No match.");
+                     }
+                 }
+             }
+         });
+     }
+ */
+
+    public void addItemReport(String name) throws FileNotFoundException {
+        List<Game> recentGames = RiotAPI.getRecentGames(name);
+        ItemWinLossReport itemWinLossReport = new ItemWinLossReport(recentGames);
+        itemsText.setText(itemWinLossReport.getReport());
     }
 
     private void itemsTextArea(){
@@ -56,21 +70,4 @@ public class ItemsStatsPane{
         AnchorPane.setTopAnchor(itemTitle, 75d);
     }
 
-    private void playerSearchLayoutSetup() {
-        Text itemSearchInstructions = new Text("Search for a ranked player:");
-        itemSearchInstructions.setLayoutX(10);
-        itemSearchInstructions.setLayoutY(35);
-        enterText = new TextField();
-        summonerButton.setText("Search");
-        itemLayout.getChildren().add(summonerButton);
-        itemLayout.getChildren().addAll(itemSearchInstructions, enterText);
-        anchorItemSummonerSearch();
-    }
-
-    private void anchorItemSummonerSearch(){
-        AnchorPane.setTopAnchor(summonerButton, 20d);
-        AnchorPane.setLeftAnchor(summonerButton, 390d);
-        AnchorPane.setTopAnchor(enterText, 20d);
-        AnchorPane.setLeftAnchor(enterText, 195d);
-    }
 }

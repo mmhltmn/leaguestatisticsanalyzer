@@ -34,7 +34,7 @@ public class ItemWinLossReport {
         }
     }
 
-    public String getWinLossReport(){
+    public String getReport(){
         return winLossReportText;
     }
 }

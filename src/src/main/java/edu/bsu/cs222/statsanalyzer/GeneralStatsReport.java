@@ -41,7 +41,7 @@ public class GeneralStatsReport {
         return df;
     }
 
-    public String getGeneralStatsReport(){
+    public String getReport(){
         return statReportText;
     }
 }
