@@ -1,4 +1,4 @@
-package edu.bsu.cs222.statsanalyzer;
+/*package edu.bsu.cs222.statsanalyzer;
 
 import com.robrua.orianna.api.core.RiotAPI;
 import com.robrua.orianna.type.core.common.Region;
@@ -36,3 +36,4 @@ public class StatsRetrieverTest {
 }
 
 
+*/

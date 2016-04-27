@@ -1,14 +1,11 @@
 package edu.bsu.cs222.statsanalyzer;
 
-import com.robrua.orianna.api.core.RiotAPI;
-import com.robrua.orianna.type.core.summoner.Summoner;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Map;
 
 public class GeneralStatsReport {
-    private String statReportText;
+    private String statReportText = "";
 
     public GeneralStatsReport(Map statMap){
         GeneralStatsRetriever statsRetriever = new GeneralStatsRetriever(statMap);
