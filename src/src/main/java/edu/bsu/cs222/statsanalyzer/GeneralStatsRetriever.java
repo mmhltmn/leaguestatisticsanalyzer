@@ -5,8 +5,6 @@ import com.robrua.orianna.type.core.staticdata.Champion;
 import com.robrua.orianna.type.core.stats.AggregatedStats;
 import com.robrua.orianna.type.core.stats.ChampionStats;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Map;
 
 
@@ -28,8 +26,7 @@ public class GeneralStatsRetriever {
     private AggregatedStats pullStatsObjectFromMap(Map statMap) {
         Champion avgChampion = RiotAPI.getChampionByID(0);
         ChampionStats avgChampStats = (ChampionStats) statMap.get(avgChampion);
-        AggregatedStats playerStatsObject = avgChampStats.getStats();
-        return playerStatsObject;
+        return avgChampStats.getStats();
     }
 
     private void setFieldsFromStatsObject(AggregatedStats playerStatsObject) {
@@ -41,7 +38,7 @@ public class GeneralStatsRetriever {
     }
 
     private void setAvgFields(AggregatedStats playerStatsObject){
-        double rankedGamesPlayedDivision = calculateGamesPlayedForDivision(playerStatsObject);
+        double rankedGamesPlayedDivision = calculateGamesPlayedForDivision();
         avgChampionsKilled = (playerStatsObject.getTotalKills() / rankedGamesPlayedDivision);
         avgAssists = (playerStatsObject.getTotalAssists() / rankedGamesPlayedDivision);
         avgDeaths = (playerStatsObject.getTotalDeaths() / rankedGamesPlayedDivision);
@@ -50,13 +47,13 @@ public class GeneralStatsRetriever {
 
     private double calculateWinLossRatio(){
         if (totalLosses != 0) {
-            return totalWins / totalLosses;
+            return (double)totalWins / (double)totalLosses;
         } else {
             return totalWins;
         }
     }
 
-    private double calculateGamesPlayedForDivision(AggregatedStats playerStatsObject){
+    private double calculateGamesPlayedForDivision(){
         if (rankedGamesPlayed != 0) {
             return rankedGamesPlayed + 1;
         } else {

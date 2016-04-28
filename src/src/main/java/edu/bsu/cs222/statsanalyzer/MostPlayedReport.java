@@ -9,16 +9,15 @@ public class MostPlayedReport {
     public MostPlayedReport(Map statMap) throws FileNotFoundException {
         MostPlayedRetriever retriever = new MostPlayedRetriever(statMap);
         List<MostPlayedChampion> champList = retriever.getChampList();
-        mostPlayedReportText = mostPlayedChampSorter(champList);
+        mostPlayedReportText = createSortedReport(champList);
     }
 
-    private String mostPlayedChampSorter(List<MostPlayedChampion> champList){
+    protected String createSortedReport(List<MostPlayedChampion> champList){
         Collections.sort(champList);
         String mostPlayedReport = "";
-        for (int i = 0; i < champList.size(); i++) {
-            MostPlayedChampion currentChamp = champList.get(i);
-            mostPlayedReport = mostPlayedReport + currentChamp.getChampionName() +
-                    ": Played " + currentChamp.gettimesPlayed() + " times" + "\n";
+        for (MostPlayedChampion champion : champList) {
+            mostPlayedReport = mostPlayedReport + champion.getChampionName() +
+                    ": Played " + champion.getTimesPlayed() + " times" + "\n";
         }
         return mostPlayedReport;
     }

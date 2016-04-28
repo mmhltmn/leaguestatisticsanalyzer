@@ -18,8 +18,6 @@ public class MostPlayedRetriever {
         createMostPlayedChampList(statMap);
     }
 
-
-
     private void createMostPlayedChampList(Map statMap) throws FileNotFoundException {
         ArrayList<String> mostPlayedChamps = createListOfChampions();
         for(String champion: mostPlayedChamps){

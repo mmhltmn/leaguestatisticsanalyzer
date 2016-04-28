@@ -1,6 +1,4 @@
 package edu.bsu.cs222.statsanalyzer;
-import com.robrua.orianna.api.core.RiotAPI;
-import com.robrua.orianna.type.core.common.Region;
 import com.robrua.orianna.type.exception.APIException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static edu.bsu.cs222.statsanalyzer.ReportView.chooseRegionAndKey;
 
 public class UserInterface extends Application {
     private Button summonerButton  = new Button();
@@ -44,8 +44,9 @@ public class UserInterface extends Application {
                     service.execute(new Runnable() {
                         public void run() {
                                     try {
-                                        it.addItemReport(enterText.getText());
-                                        gt.addReports(enterText.getText());
+                                        ReportView reportView = new ReportView(enterText.getText());
+                                        it.addItemReport(reportView);
+                                        gt.addReports(reportView);
                                 } catch (APIException e) {
                                     enterText.setText("No match.");
                                 } catch (FileNotFoundException e) {
@@ -110,10 +111,5 @@ public class UserInterface extends Application {
         AnchorPane.setLeftAnchor(summonerButton, 390d);
         AnchorPane.setTopAnchor(enterText, 20d);
         AnchorPane.setLeftAnchor(enterText, 195d);
-    }
-
-    private void chooseRegionAndKey() {  //Tested
-        RiotAPI.setRegion(Region.NA);
-        RiotAPI.setAPIKey("70f18885-23eb-4106-ad64-04554ffc5b4d");
     }
 }

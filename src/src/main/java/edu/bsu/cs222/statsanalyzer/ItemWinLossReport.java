@@ -1,12 +1,9 @@
 package edu.bsu.cs222.statsanalyzer;
 
 import com.robrua.orianna.type.core.game.Game;
-import com.robrua.orianna.type.core.staticdata.Item;
 
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ItemWinLossReport {
     private String winLossReportText;
@@ -23,13 +20,12 @@ public class ItemWinLossReport {
         NumberFormat percentFormat = NumberFormat.getPercentInstance();
         percentFormat.setMaximumFractionDigits(1);
         winLossReportText = "";
-        for(int i=0;i<gamesList.size();i++){
-            GameItem currentGame = gamesList.get(i);
-            winLossReportText += currentGame.getName();
+        for(GameItem game : gamesList){
+            winLossReportText += game.getName();
             winLossReportText += ": Bought ";
-            winLossReportText += currentGame.getGamesPlayed();
+            winLossReportText += game.getGamesPlayed();
             winLossReportText += " times, Win Rate: ";
-            winLossReportText += percentFormat.format(currentGame.getWinRate());
+            winLossReportText += percentFormat.format(game.getWinRate());
             winLossReportText += "\n";
         }
     }

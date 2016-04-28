@@ -94,6 +94,8 @@ public class ItemWinLossCalculator {
         itemWinAndLossMap.put(itemsList.get(itemNumber), newLossCount);
     }
 
+    @SuppressWarnings("unchecked")
+    //This method will always work even though the type cast is unchecked.
     public List<GameItem> makeListForReport(){
         List<GameItem> gameItems = new ArrayList<GameItem>();
         Object[] a = itemWinAndLossMap.entrySet().toArray();
@@ -105,6 +107,4 @@ public class ItemWinLossCalculator {
         }
         return gameItems;
     }
-
-
 }

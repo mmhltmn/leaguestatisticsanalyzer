@@ -11,14 +11,14 @@ public class MostPlayedChampion implements Comparable<MostPlayedChampion>{
     }
 
     public int compareTo(MostPlayedChampion other) {
-        return ((Integer)other.timesPlayed).compareTo(((Integer)timesPlayed));
+        return ((Integer)other.timesPlayed).compareTo((timesPlayed));
     }
 
     public String getChampionName(){
         return name;
     }
 
-    public int gettimesPlayed(){
+    public int getTimesPlayed(){
         return timesPlayed;
     }
 }

@@ -2,17 +2,15 @@ package edu.bsu.cs222.statsanalyzer;
 
 public class GameItem {
     private String name;
-    private int wins;
-    private int losses;
     private int gamesPlayed;
     private double winRate;
 
     public GameItem(String itemName, int[] winLoss){
         name = itemName;
-        wins = winLoss[0];
-        losses = winLoss[1];
+        int wins = winLoss[0];
+        int losses = winLoss[1];
         gamesPlayed = wins + losses;
-        winRate = (double)(wins/gamesPlayed);
+        winRate = ((double)wins/(double)gamesPlayed);
     }
 
     public String getName(){
