@@ -30,34 +30,26 @@ public class ItemWinLossCalculatorTest {
         SerializedObjectsReader sor = new SerializedObjectsReader();
         recentGames = sor.readRecentGamesFromFile();
         mockListSetup();
-        mockCalcSetup();
+        setupTestList();
     }
 
-    public void mockListSetup() throws Exception {
-        mockItemList = new ArrayList<Item>();
-        Item mockSword = mock(Item.class);
-        when(mockSword.getName()).thenReturn("Sword");
-        Item mockShield = mock(Item.class);
-        when(mockShield.getName()).thenReturn("Shield");
-        mockItemList.add(mockSword);
-        mockItemList.add(mockShield);
-    }
-
-    public void mockCalcSetup() throws Exception {
+    public void setupTestList() throws Exception {
         ItemWinLossCalculator testCalc = spy(new ItemWinLossCalculator());
         doReturn(mockItemList).when(testCalc, "makeItemList", anyObject());
         testCalc.calculateItemWinsAndLosses(recentGames);
         testList = testCalc.makeListForReport();
     }
 
-    @Test
-    public void testItemName(){
-        Assert.assertTrue(testList.get(0).getName().equals("Shield"));
+    public void mockListSetup() throws Exception {
+        mockItemList = new ArrayList<Item>();
+        Item mockShield = mock(Item.class);
+        when(mockShield.getName()).thenReturn("Shield");
+        mockItemList.add(mockShield);
     }
 
     @Test
-    public void testOtherItemName(){
-        Assert.assertTrue(testList.get(0).getName().equals("Sword"));
+    public void testItemName() {
+        Assert.assertTrue(testList.get(0).getName().equals("Shield"));
     }
 
     @Test
