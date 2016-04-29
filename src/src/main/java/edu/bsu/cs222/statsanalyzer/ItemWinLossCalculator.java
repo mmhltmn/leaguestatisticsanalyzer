@@ -7,7 +7,6 @@ import com.robrua.orianna.type.exception.MissingDataException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.NumberFormat;
 import java.util.*;
 
 public class ItemWinLossCalculator {
@@ -17,27 +16,10 @@ public class ItemWinLossCalculator {
     private List<Item> itemsList;
     private static final int NUMBER_OF_ITEMS = 6;
 
-    public ItemWinLossCalculator(List<Game> recentGames){
+    public void calculateItemWinsAndLosses(List<Game> recentGames){
         winsAndLossesToItemMap(recentGames);
         createWinAndLossMap(itemsUsedInWinningGames);
         createWinAndLossMap(itemsUsedInLosingGames);
-    }
-
-    @SuppressWarnings("unchecked")
-    //This method will always work even though the type cast is unchecked.
-    public String createReport(){
-        NumberFormat percentFormat = NumberFormat.getPercentInstance();
-        percentFormat.setMaximumFractionDigits(1);
-        Object[] a = itemWinAndLossMap.entrySet().toArray();
-        String sortedMap = "";
-        for (Object e : a) {
-            int[] currentValue = ((Map.Entry<Integer, int[]>) e).getValue();
-            int gamesPlayed = currentValue[0] + currentValue[1];
-            sortedMap = sortedMap + (((Map.Entry<Integer, int[]>) e).getKey() +
-                    ": Bought " + gamesPlayed + " times, Win Rate: " +
-                    percentFormat.format((double)(currentValue[0])/gamesPlayed) + "\n");
-        }
-        return sortedMap;
     }
 
     private void winsAndLossesToItemMap(List<Game> recentGames) {
@@ -56,7 +38,7 @@ public class ItemWinLossCalculator {
     }
 
     private List<Item> makeItemList(RawStats currentGameStats) throws MissingDataException {
-        ArrayList<Item> items = new ArrayList<Item>();
+        List<Item> items = new ArrayList<Item>();
         for (int i=0;i<=NUMBER_OF_ITEMS;i++){
             try{
                 Method m= currentGameStats.getClass().getMethod("getItem"+String.valueOf(i));
@@ -110,5 +92,19 @@ public class ItemWinLossCalculator {
         int[] newLossCount = itemWinAndLossMap.get(itemsList.get(itemNumber));
         newLossCount[1]++;
         itemWinAndLossMap.put(itemsList.get(itemNumber), newLossCount);
+    }
+
+    @SuppressWarnings("unchecked")
+    //This method will always work even though the type cast is unchecked.
+    public List<GameItem> makeListForReport(){
+        List<GameItem> gameItems = new ArrayList<GameItem>();
+        Object[] a = itemWinAndLossMap.entrySet().toArray();
+        for (Object e : a) {
+            String name = ((Map.Entry<Item, int[]>) e).getKey().getName();
+            int[] winLoss = ((Map.Entry<Item, int[]>) e).getValue();
+            GameItem currentItem = new GameItem(name, winLoss);
+            gameItems.add(currentItem);
+        }
+        return gameItems;
     }
 }
