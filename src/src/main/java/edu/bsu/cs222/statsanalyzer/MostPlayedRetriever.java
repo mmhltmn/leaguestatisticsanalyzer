@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.*;
 
 
-public class MostPlayedRetriever {
+public class MostPlayedRetriever{
     private List<MostPlayedChampion> champList = new ArrayList<MostPlayedChampion>();
 
     public MostPlayedRetriever(Map statMap) throws FileNotFoundException {

@@ -16,7 +16,7 @@ public class ItemWinLossCalculator {
     private List<Item> itemsList;
     private static final int NUMBER_OF_ITEMS = 6;
 
-    public ItemWinLossCalculator(List<Game> recentGames){
+    public void calculateItemWinsAndLosses(List<Game> recentGames){
         winsAndLossesToItemMap(recentGames);
         createWinAndLossMap(itemsUsedInWinningGames);
         createWinAndLossMap(itemsUsedInLosingGames);
@@ -38,7 +38,7 @@ public class ItemWinLossCalculator {
     }
 
     private List<Item> makeItemList(RawStats currentGameStats) throws MissingDataException {
-        ArrayList<Item> items = new ArrayList<Item>();
+        List<Item> items = new ArrayList<Item>();
         for (int i=0;i<=NUMBER_OF_ITEMS;i++){
             try{
                 Method m= currentGameStats.getClass().getMethod("getItem"+String.valueOf(i));

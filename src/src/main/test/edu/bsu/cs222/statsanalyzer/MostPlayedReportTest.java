@@ -17,8 +17,11 @@ import java.util.Map;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(MostPlayedReport.class)
 public class MostPlayedReportTest {
-    private List<MostPlayedChampion> champList = new ArrayList<MostPlayedChampion>();
-    private Map statMap;
+    List<MostPlayedChampion> champList = new ArrayList<MostPlayedChampion>();
+    Map statMap;
+    private static final int HIGHEST_PLAY = 15;
+    private static final int MIDDLE_PLAY = 7;
+    private static final int LOWEST_PLAY = 0;
 
     @Before
     public void testSetup() throws Exception {
@@ -29,23 +32,20 @@ public class MostPlayedReportTest {
     }
 
     public void makeTestChampions(){
-        MostPlayedChampion jeffMPC = new MostPlayedChampion("Jeff", 2);
-        MostPlayedChampion paulMPC = new MostPlayedChampion("Paul", 7);
-        MostPlayedChampion jasonMPC = new MostPlayedChampion("Jason", 15);
-        champList.add(jeffMPC);
-        champList.add(paulMPC);
-        champList.add(jasonMPC);
+        champList.add(new MostPlayedChampion("Jeff", MIDDLE_PLAY));
+        champList.add(new MostPlayedChampion("Paul", LOWEST_PLAY));
+        champList.add(new MostPlayedChampion("Jason", HIGHEST_PLAY));
     }
 
     @Test
     public void testGetReport() throws FileNotFoundException {
         MostPlayedReport mpc = new MostPlayedReport(statMap);
-        Assert.assertTrue(mpc.getReport().contains("Jeff: Played 2 times"));
+        Assert.assertTrue(mpc.getReport().contains("Jeff: Played 7 times"));
     }
 
     @Test
     public void testGetReportSorted() throws FileNotFoundException {
         MostPlayedReport mpc = new MostPlayedReport(statMap);
-        Assert.assertTrue(mpc.getReport().contains("Jason: Played 15 times\nPaul: Played 7 times"));
+        Assert.assertTrue(mpc.getReport().contains("Jason: Played 15 times\nJeff: Played 7 times"));
     }
 }

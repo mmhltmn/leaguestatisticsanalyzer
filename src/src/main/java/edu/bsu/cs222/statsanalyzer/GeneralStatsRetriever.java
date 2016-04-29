@@ -7,7 +7,6 @@ import com.robrua.orianna.type.core.stats.ChampionStats;
 
 import java.util.Map;
 
-
 public class GeneralStatsRetriever {
     private int rankedGamesPlayed;
     private int totalWins;

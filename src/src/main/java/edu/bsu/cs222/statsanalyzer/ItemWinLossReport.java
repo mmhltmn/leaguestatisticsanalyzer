@@ -9,7 +9,8 @@ public class ItemWinLossReport {
     private String winLossReportText;
 
     public ItemWinLossReport(List<Game> recentGames){
-        ItemWinLossCalculator itemWinLossCalculator = new ItemWinLossCalculator(recentGames);
+        ItemWinLossCalculator itemWinLossCalculator = new ItemWinLossCalculator();
+        itemWinLossCalculator.calculateItemWinsAndLosses(recentGames);
         List<GameItem> gamesList = itemWinLossCalculator.makeListForReport();
         createWinLossReport(gamesList);
     }
